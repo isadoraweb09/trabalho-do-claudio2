@@ -1,52 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class player : MonoBehaviour
 {
-    public GameObject bullet;
+    public float speed = 5f; // Velocidade do movimento do jogador
 
-    public Transform foot;
-    bool groundcheck;
+    private Rigidbody2D rb;
 
-
-
-    public int life = 3;
-    public Rigidbody2D body;
-    public float speed = 5, jumpStrength = 5, bulletspeed = 8;
-    float horizontal;
-    float vertical;
-    float direction;
-
-
-
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-
-        body.velocity = new Vector2(horizontal * speed, body.velocity.y);
-        groundcheck = Physics2D.OverlapCircle(foot.position, 0.05f);
-
-
-        if (Input.GetButtonDown("Jump") && groundcheck)
-        {
-            body.AddForce(new Vector2(0, jumpStrength * 100));
-
-        }
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            GameObject temp = Instantiate(bullet, transform.position, transform.rotation);
-            temp.GetComponent<Rigidbody2D>().velocity = new Vector2(bulletspeed, 0);
-        }
-        if (Input.GetButtonDown("Fire3"))
-        {
-            speed = speed * 2;
-        }
+        rb = GetComponent<Rigidbody2D>(); // Obtendo a referência para o Rigidbody2D
     }
 
+    void Update()
+    {
+        float moveInput = Input.GetAxisRaw("Horizontal"); // Obtendo a entrada do eixo horizontal (A/D, setas esquerda/direita)
+        float moveVelocity = moveInput * speed; // Calculando a velocidade de movimento
+
+        // Aplicando o movimento horizontal
+        rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
+
+        // Virar o personagem para a direção correta
+        if (moveInput > 0)
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f); // Virar para a direita
+        }
+        else if (moveInput < 0)
+        {
+            transform.localScale = new Vector3(-1f, 1f, 1f); // Virar para a esquerda
+        }
+    }
 }
 
 
-   
