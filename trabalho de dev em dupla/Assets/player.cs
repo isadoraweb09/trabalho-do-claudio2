@@ -29,7 +29,7 @@ public class player : MonoBehaviour
         }
         else if (moveInput < 0)
         {
-            transform.localScale = new Vector3(-1f, 1f, 1f); // Virar para a esquerda
+            transform.localScale = new Vector3(1f, 1f, 1f); // Virar para a esquerda
         }
     }
 }
